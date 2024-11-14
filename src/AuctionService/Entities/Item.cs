@@ -14,6 +14,6 @@ public record Item
     public string? ImageUrl { get; set; }
 
     // navigation properties
-    public required Auction Auction { get; set; }
+    public Auction? Auction { get; set; }
     public Guid AuctionId { get; set; }
 }
