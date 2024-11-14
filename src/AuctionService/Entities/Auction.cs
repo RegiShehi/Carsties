@@ -11,5 +11,5 @@ public record Auction
     public DateTime UpdatedAt { get; init; } = DateTime.UtcNow;
     public DateTime AuctionEnd { get; init; }
     public Status Status { get; init; }
-    public Item? Item { get; init; }
+    public required Item Item { get; init; }
 }
