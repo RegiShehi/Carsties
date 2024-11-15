@@ -8,6 +8,16 @@
             - "5432:5432"
         volumes:
             - pgdata:/var/lib/postgresql/data
+    mongo:
+        image: mongo
+        container_name: mongo
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=root
+            - MONGO_INITDB_ROOT_PASSWORD=mongopw
+        ports:
+            - "27017:27017"
+        volumes:
+            - mongodata:/data/db
 #    auctionservice:
 #        image: auctionservice
 #        build:
@@ -15,3 +25,4 @@
 #            dockerfile: src/AuctionService/Dockerfile
 volumes:
     pgdata:
+    mongodata:
