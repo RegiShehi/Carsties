@@ -18,6 +18,15 @@
             - "27017:27017"
         volumes:
             - mongodata:/data/db
+    rabbitmq:
+        image: rabbitmq:4.0.3-management-alpine
+        container_name: rabbitmq
+        ports:
+            - "5672:5672"
+            - "15672:15672"
+        environment:
+            RABBITMQ_DEFAULT_USER: guest
+            RABBITMQ_DEFAULT_PASS: guest
 #    auctionservice:
 #        image: auctionservice
 #        build:
