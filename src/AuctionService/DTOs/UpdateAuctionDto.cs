@@ -4,18 +4,13 @@ namespace AuctionService.DTOs;
 
 public class UpdateAuctionDto
 {
-    [Required]
-    public required string Make { get; set; }
+    public string? Make { get; set; }
 
-    [Required]
-    public required string Model { get; set; }
+    public string? Model { get; set; }
 
-    [Required]
-    public required string Color { get; set; }
+    public  string? Color { get; set; }
 
-    [Required]
-    public int Year { get; set; }
+    public int? Year { get; set; }
 
-    [Required]
-    public int Mileage { get; set; }
+    public int? Mileage { get; set; }
 }
