@@ -17,8 +17,7 @@ public class DbInitializer
             .Key(x => x.Model, KeyType.Text)
             .Key(x => x.Color, KeyType.Text).CreateAsync();
 
-        // var count = await DB.CountAsync<Item>();
-
+        // Call Auction Service through HTTP Client to fetch data and populate search service
         using var scope = app.Services.CreateScope();
 
         var httpClient = scope.ServiceProvider.GetRequiredService<AuctionSvcHttpClient>();
