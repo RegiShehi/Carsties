@@ -45,11 +45,11 @@ public class AuctionsController(AuctionDbContext context, IMapper mapper, IPubli
 
         context.Auctions.Add(auction);
 
-        var result = await context.SaveChangesAsync() > 0;
-
         var newAuction = mapper.Map<AuctionDto>(auction);
 
         await publishEndpoint.Publish(mapper.Map<AuctionCreated>(newAuction));
+
+        var result = await context.SaveChangesAsync() > 0;
 
         if (!result) return BadRequest("Couldn't save changes");
 
