@@ -1,7 +1,6 @@
 ﻿using MongoDB.Driver;
 using MongoDB.Entities;
 using SearchService.Models;
-using SearchService.Services;
 
 namespace SearchService.Data;
 
@@ -20,9 +19,9 @@ public class DbInitializer
         // Call Auction Service through HTTP Client to fetch data and populate search service
         using var scope = app.Services.CreateScope();
 
-        var httpClient = scope.ServiceProvider.GetRequiredService<AuctionSvcHttpClient>();
+        // var httpClient = scope.ServiceProvider.GetRequiredService<AuctionSvcHttpClient>();
 
-        var items = await httpClient.GetItemsForSearchDb();
+        var items = new List<Item>(); // await httpClient.GetItemsForSearchDb();
 
         Console.WriteLine(items.Count + " returned from Auction Service");
 
