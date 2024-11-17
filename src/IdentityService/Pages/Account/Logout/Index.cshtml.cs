@@ -6,13 +6,14 @@ using Duende.IdentityServer.Extensions;
 using Duende.IdentityServer.Services;
 using IdentityModel;
 using IdentityService.Models;
+using IdentityService.Pages.Logout;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace IdentityService.Pages.Logout;
+namespace IdentityService.Pages.Account.Logout;
 
 [SecurityHeaders]
 [AllowAnonymous]
@@ -48,18 +49,14 @@ public class Index : PageModel
         {
             var context = await _interaction.GetLogoutContextAsync(LogoutId);
             if (context?.ShowSignoutPrompt == false)
-            {
                 // it's safe to automatically sign-out
                 showLogoutPrompt = false;
-            }
         }
 
         if (showLogoutPrompt == false)
-        {
             // if the request for logout was properly authenticated from IdentityServer, then
             // we don't need to show the prompt and can just log the user out directly.
             return await OnPost();
-        }
 
         return Page();
     }
@@ -85,7 +82,6 @@ public class Index : PageModel
 
             // if it's a local login we can ignore this workflow
             if (idp != null && idp != Duende.IdentityServer.IdentityServerConstants.LocalIdentityProvider)
-            {
                 // we need to see if the provider supports external logout
                 if (await HttpContext.GetSchemeSupportsSignOutAsync(idp))
                 {
@@ -97,7 +93,6 @@ public class Index : PageModel
                     // this triggers a redirect to the external provider for sign-out
                     return SignOut(new AuthenticationProperties { RedirectUri = url }, idp);
                 }
-            }
         }
 
         return RedirectToPage("/Account/Logout/LoggedOut", new { logoutId = LogoutId });
