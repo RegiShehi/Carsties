@@ -8,9 +8,9 @@
             - "5432:5432"
         volumes:
             - pgdata:/var/lib/postgresql/data
-    mongo:
+    mongodb:
         image: mongo
-        container_name: mongo
+        container_name: mongodb
         environment:
             - MONGO_INITDB_ROOT_USERNAME=root
             - MONGO_INITDB_ROOT_PASSWORD=mongopw
@@ -28,7 +28,6 @@
             RABBITMQ_DEFAULT_USER: guest
             RABBITMQ_DEFAULT_PASS: guest
     auction-svc:
-        #        image: auctionservice
         container_name: auction-service
         build:
             context: .
@@ -44,6 +43,23 @@
         depends_on:
             - postgres
             - rabbitmq
+    search-svc:
+        container_name: search-service
+        build:
+            context: .
+            dockerfile: src/SearchService/Dockerfile
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_URLS=http://+:80
+            - RabbitMq__Host=rabbitmq
+            - ConnectionStrings__MongoDbConnection=mongodb://root:mongopw@mongodb
+            - AuctionServiceUrl=http://auction-svc
+        ports:
+            - "7002:80"
+        depends_on:
+            - mongodb
+            - rabbitmq
+            - auction-svc
 volumes:
     pgdata:
     mongodata:
