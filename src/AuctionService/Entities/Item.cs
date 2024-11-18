@@ -12,6 +12,7 @@ public record Item
     public int? Year { get; set; }
     public int? Mileage { get; set; }
     public string? ImageUrl { get; set; }
+    public int? SoldAmount { get; set; }
 
     // navigation properties
     public Auction? Auction { get; set; }
