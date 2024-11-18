@@ -26,13 +26,15 @@ builder.Services.AddMassTransit(x =>
 
     x.AddConsumersFromNamespaceContaining<AuctionCreatedFaultConsumer>();
 
+    Console.WriteLine("-->Host: " + builder.Configuration["RabbitMq:Host"]);
+
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host(builder.Configuration["RabbitMq:Host"], "/",
             host =>
             {
                 host.Username(builder.Configuration.GetValue("RabbitMq:Username", "guest") ?? string.Empty);
-                host.Username(builder.Configuration.GetValue("RabbitMq:Password", "password") ?? string.Empty);
+                host.Username(builder.Configuration.GetValue("RabbitMq:Password", "guest") ?? string.Empty);
             });
 
         cfg.ConfigureEndpoints(context);
