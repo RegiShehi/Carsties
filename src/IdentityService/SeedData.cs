@@ -21,7 +21,8 @@ public class SeedData
         if (userMgr.Users.Any()) return;
 
         var alice = userMgr.FindByNameAsync("alice").Result;
-        if (alice == null)
+
+        if (alice is null)
         {
             alice = new ApplicationUser
             {
@@ -32,10 +33,9 @@ public class SeedData
             var result = userMgr.CreateAsync(alice, "Pass123$").Result;
             if (!result.Succeeded) throw new Exception(result.Errors.First().Description);
 
-            result = userMgr.AddClaimsAsync(alice, new[]
-            {
+            result = userMgr.AddClaimsAsync(alice, [
                 new Claim(JwtClaimTypes.Name, "Alice Smith")
-            }).Result;
+            ]).Result;
             if (!result.Succeeded) throw new Exception(result.Errors.First().Description);
 
             Log.Debug("alice created");
@@ -46,7 +46,8 @@ public class SeedData
         }
 
         var bob = userMgr.FindByNameAsync("bob").Result;
-        if (bob == null)
+
+        if (bob is null)
         {
             bob = new ApplicationUser
             {
@@ -54,13 +55,15 @@ public class SeedData
                 Email = "BobSmith@email.com",
                 EmailConfirmed = true
             };
+
             var result = userMgr.CreateAsync(bob, "Pass123$").Result;
+
             if (!result.Succeeded) throw new Exception(result.Errors.First().Description);
 
-            result = userMgr.AddClaimsAsync(bob, new[]
-            {
+            result = userMgr.AddClaimsAsync(bob, [
                 new Claim(JwtClaimTypes.Name, "Bob Smith")
-            }).Result;
+            ]).Result;
+
             if (!result.Succeeded) throw new Exception(result.Errors.First().Description);
 
             Log.Debug("bob created");
