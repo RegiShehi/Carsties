@@ -73,6 +73,16 @@
             - "5001:80"
         depends_on:
             - postgres
+    gateway-svc:
+        container_name: gateway-service
+        build:
+            context: .
+            dockerfile: src/GatewayService/Dockerfile
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Docker
+            - ASPNETCORE_URLS=http://+:80
+        ports:
+            - "6001:80"
 
 volumes:
     pgdata:
