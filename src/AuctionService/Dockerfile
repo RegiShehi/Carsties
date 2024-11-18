@@ -1,16 +1,18 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER $APP_UID
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
+EXPOSE 80
+#EXPOSE 8080
+#EXPOSE 8081
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/AuctionService/AuctionService.csproj", "src/AuctionService/"]
+COPY ["src/Contracts/Contracts.csproj", "src/Contracts/"]
 RUN dotnet restore "src/AuctionService/AuctionService.csproj"
-COPY . .
-WORKDIR "/src/src/AuctionService"
+COPY src/ .
+WORKDIR "/src/AuctionService"
 RUN dotnet build "AuctionService.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
