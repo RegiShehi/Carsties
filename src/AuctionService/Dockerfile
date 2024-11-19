@@ -3,6 +3,16 @@ USER $APP_UID
 WORKDIR /app
 EXPOSE 80
 
+## Development stage
+#FROM mcr.microsoft.com/dotnet/sdk:8.0 AS development
+#WORKDIR /src
+#COPY ["src/AuctionService/AuctionService.csproj", "src/AuctionService/"]
+#COPY ["src/Contracts/Contracts.csproj", "src/Contracts/"]
+#RUN dotnet restore "src/AuctionService/AuctionService.csproj" --disable-parallel
+#COPY src/ .
+#WORKDIR "/src/AuctionService"
+#CMD ["dotnet", "watch", "run", "--no-launch-profile", "--urls", "http://+:80"]
+
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
