@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BiddingService.DTOs;
 using BiddingService.Models;
+using BiddingService.Services;
 using Contracts;
 using MassTransit;
 using Microsoft.AspNetCore.Authorization;
@@ -11,15 +12,13 @@ namespace BiddingService.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class BidsController(IMapper mapper, IPublishEndpoint publishEndpoint) : Controller
+public class BidsController(IMapper mapper, IPublishEndpoint publishEndpoint, GrpcAuctionClient grpcClient) : Controller
 {
     [Authorize]
-    [HttpGet]
+    [HttpPost]
     public async Task<ActionResult<BidDto>> PlaceBid(string auctionId, int amount)
     {
-        var auction = await DB.Find<Auction>().OneAsync(auctionId);
-
-        if (auction is null) return NotFound();
+        var auction = await DB.Find<Auction>().OneAsync(auctionId) ?? grpcClient.GetAuction(auctionId);
 
         if (auction.Seller == User.Identity?.Name) return BadRequest("You cannot bid on your own auction");
 
