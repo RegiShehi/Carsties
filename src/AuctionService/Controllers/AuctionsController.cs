@@ -32,7 +32,7 @@ public class AuctionsController(IAuctionRepository repo, IMapper mapper, IPublis
 
     [Authorize]
     [HttpPost]
-    public async Task<ActionResult<AuctionDto>> CreateAuction(AuctionDto auctionDto)
+    public async Task<ActionResult<AuctionDto>> CreateAuction(CreateAuctionDto auctionDto)
     {
         var auction = mapper.Map<Auction>(auctionDto);
 
