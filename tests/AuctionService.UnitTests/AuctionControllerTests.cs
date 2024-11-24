@@ -39,12 +39,13 @@ public class AuctionControllerTests
     {
         //arrange 
         var auctions = _fixture.CreateMany<AuctionDto>(10).ToList();
-        _auctionRepo.Setup(r => r.GetAuctionsAsync(null)).ReturnsAsync(auctions);
+        _auctionRepo.Setup(r => r.GetAuctionsAsync(string.Empty)).ReturnsAsync(auctions);
 
         //act
-        var result = await _controller.GetAllAuctions(null);
+        var result = await _controller.GetAllAuctions(string.Empty);
 
-        //asset
+        //assert
+        Assert.NotNull(result.Value);
         Assert.Equal(10, result.Value.Count);
         Assert.IsType<ActionResult<List<AuctionDto>>>(result);
     }
