@@ -10,30 +10,27 @@ using MassTransit;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using NuGet.Frameworks;
 
 namespace AuctionService.UnitTests;
 
 public class AuctionControllerTests
 {
     private readonly Mock<IAuctionRepository> _auctionRepo;
-    private readonly Mock<IPublishEndpoint> _publishEndpoint;
-    private readonly IMapper _mapper;
     private readonly Fixture _fixture;
     private readonly AuctionsController _controller;
 
     public AuctionControllerTests()
     {
         _auctionRepo = new Mock<IAuctionRepository>();
-        _publishEndpoint = new Mock<IPublishEndpoint>();
+        Mock<IPublishEndpoint> publishEndpoint = new();
 
         var mockMapper = new MapperConfiguration(cfg => { cfg.AddMaps(typeof(MappingProfiles).Assembly); })
             .CreateMapper().ConfigurationProvider;
 
-        _mapper = new Mapper(mockMapper);
+        IMapper mapper = new Mapper(mockMapper);
 
         _fixture = new Fixture();
-        _controller = new AuctionsController(_auctionRepo.Object, _mapper, _publishEndpoint.Object)
+        _controller = new AuctionsController(_auctionRepo.Object, mapper, publishEndpoint.Object)
         {
             ControllerContext = new ControllerContext
             {
