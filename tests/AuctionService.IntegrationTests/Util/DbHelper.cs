@@ -38,12 +38,21 @@ public static class DbHelper
                 .Without(a => a.Item)
                 .Create();
 
+
             // Build Item separately and assign to Auction
             var item = Fixture.Build<Item>()
                 .Without(b => b.Auction)
                 .Create();
 
             auction.Item = item;
+
+            if (i == 0)
+            {
+                auction.Id = Guid.Parse("1b9db29a-bc7a-4907-8c9e-80c5b79b1ae4");
+                item.Model = "GT";
+                item.Make = "Ford";
+            }
+
             auctions.Add(auction);
         }
 

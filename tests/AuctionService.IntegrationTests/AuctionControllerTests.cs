@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+﻿using System.Net;
 using System.Net.Http.Json;
 using AuctionService.Data;
 using AuctionService.DTOs;
@@ -12,6 +12,7 @@ public class AuctionControllerTests : IClassFixture<CustomWebAppFactory>, IAsync
 {
     private readonly CustomWebAppFactory _factory;
     private readonly HttpClient _httpClient;
+    private const string GtId = "1b9db29a-bc7a-4907-8c9e-80c5b79b1ae4";
 
     public AuctionControllerTests(CustomWebAppFactory factory)
     {
@@ -20,11 +21,8 @@ public class AuctionControllerTests : IClassFixture<CustomWebAppFactory>, IAsync
     }
 
     [Fact]
-    public async Task GetAuctions_ShouldReturnAllAuctions()
+    public async Task GetAuctions_WithNoParams_ReturnsAllAuctions()
     {
-        // arrange
-        // Nothing to arrange at this point
-
         // act
         var response = await _httpClient.GetFromJsonAsync<List<AuctionDto>>("api/auctions");
 
@@ -32,6 +30,38 @@ public class AuctionControllerTests : IClassFixture<CustomWebAppFactory>, IAsync
         Assert.NotNull(response);
         Assert.Equal(3, response.Count);
     }
+
+    [Fact]
+    public async Task GetAuctionById_WithValidId_ReturnsAuction()
+    {
+        // act
+        var response = await _httpClient.GetFromJsonAsync<AuctionDto>($"api/auctions/{GtId}");
+
+        // assert
+        Assert.NotNull(response);
+        Assert.Equal("GT", response.Model);
+    }
+
+    [Fact]
+    public async Task GetAuctionById_WithInvalidId_ReturnsNotFound()
+    {
+        // act
+        var response = await _httpClient.GetAsync($"api/auctions/{Guid.NewGuid()}");
+
+        // assert
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task GetAuctionById_WithInvalidParams_ReturnsBadRequest()
+    {
+        // act
+        var response = await _httpClient.GetAsync("api/auctions/notaguid");
+
+        // assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
 
     public Task InitializeAsync()
     {
