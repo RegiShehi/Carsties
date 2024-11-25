@@ -30,7 +30,7 @@ public class AuctionControllerTests : IClassFixture<CustomWebAppFactory>, IAsync
 
         // assert
         Assert.NotNull(response);
-        Assert.Equal(2, response.Count);
+        Assert.Equal(3, response.Count);
     }
 
     public Task InitializeAsync()
