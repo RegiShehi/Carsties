@@ -1,4 +1,5 @@
 ﻿using AuctionService.Data;
+using AuctionService.IntegrationTests.Util;
 using MassTransit;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -28,9 +29,7 @@ public class CustomWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetim
         builder.ConfigureTestServices(services =>
         {
             // replace AuctionDbContext configuration with a new one
-            var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<AuctionDbContext>));
-
-            if (descriptor is not null) services.Remove(descriptor);
+            services.RemoveDbContext<AuctionDbContext>();
 
             services.AddDbContext<AuctionDbContext>(options =>
             {
@@ -41,13 +40,7 @@ public class CustomWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetim
             services.AddMassTransitTestHarness();
 
             // create db schema and run migrations
-            var sp = services.BuildServiceProvider();
-
-            using var scope = sp.CreateScope();
-            var scopedServices = scope.ServiceProvider;
-            var db = scopedServices.GetRequiredService<AuctionDbContext>();
-
-            db.Database.Migrate();
+            services.EnsureCreated<AuctionDbContext>();
         });
     }
 }
