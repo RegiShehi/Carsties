@@ -1,12 +1,14 @@
 ﻿using AuctionService.Data;
 using AuctionService.IntegrationTests.Util;
 using MassTransit;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Testcontainers.PostgreSql;
+using WebMotions.Fake.Authentication.JwtBearer;
 
 namespace AuctionService.IntegrationTests.Fixtures;
 
@@ -41,6 +43,12 @@ public class CustomWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetim
 
             // create db schema and run migrations
             services.EnsureCreated<AuctionDbContext>();
+
+            // handle authentication
+            services.AddAuthentication(FakeJwtBearerDefaults.AuthenticationScheme).AddFakeJwtBearer(option =>
+            {
+                option.BearerValueType = FakeJwtBearerBearerValueType.Jwt;
+            });
         });
     }
 }
