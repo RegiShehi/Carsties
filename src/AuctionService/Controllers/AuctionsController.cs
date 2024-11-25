@@ -15,9 +15,9 @@ public class AuctionsController(IAuctionRepository repo, IMapper mapper, IPublis
     : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<List<AuctionDto>>> GetAllAuctions(string date)
+    public async Task<ActionResult<List<AuctionDto>>> GetAllAuctions(string? date)
     {
-        return await repo.GetAuctionsAsync(date);
+        return await repo.GetAuctionsAsync(date ?? "");
     }
 
     [HttpGet("{id:guid}")]
