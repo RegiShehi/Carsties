@@ -8,7 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AuctionService.IntegrationTests;
 
-public class AuctionControllerTests : IClassFixture<CustomWebAppFactory>, IAsyncLifetime
+[Collection("Shared Collection")]
+public class AuctionControllerTests : IAsyncLifetime
 {
     private readonly CustomWebAppFactory _factory;
     private readonly HttpClient _httpClient;
@@ -101,7 +102,7 @@ public class AuctionControllerTests : IClassFixture<CustomWebAppFactory>, IAsync
     {
         // arrange
         var auction = GetAuctionForCreate();
-        auction.Make = null;
+        auction.Make = null!;
         _httpClient.SetFakeJwtBearerToken(AuthHelper.GetBearerForUser("Bob"));
 
         // act
